@@ -1,8 +1,8 @@
 package com.kwidjaja.grenade.app.util
 
+import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import com.kwidjaja.grenade.app.model.{Coordinate, Grenade, Point, Radius}
-import spray.json.DefaultJsonProtocol._
-import spray.json.RootJsonFormat
+import spray.json.{DefaultJsonProtocol, RootJsonFormat}
 
 /**
   * Trait contains definition of JSON Format for registered types.
@@ -10,10 +10,10 @@ import spray.json.RootJsonFormat
   * @author widjajk
   * @since 5/10/19 4:00 PM
   */
-trait JsonFormatUtil {
+trait JsonFormatUtil extends SprayJsonSupport with DefaultJsonProtocol {
 
-  implicit val pointFormat: RootJsonFormat[Point] = jsonFormat2(Point)
-  implicit val radiusFormat: RootJsonFormat[Radius] = jsonFormat1(Radius)
-  implicit val coordinateFormat: RootJsonFormat[Coordinate] = jsonFormat2(Coordinate)
-  implicit val grenadeFormat: RootJsonFormat[Grenade] = jsonFormat1(Grenade)
+  implicit protected val pointFormat: RootJsonFormat[Point] = jsonFormat2(Point)
+  implicit protected val radiusFormat: RootJsonFormat[Radius] = jsonFormat1(Radius)
+  implicit protected val coordinateFormat: RootJsonFormat[Coordinate] = jsonFormat2(Coordinate)
+  implicit protected val grenadeFormat: RootJsonFormat[Grenade] = jsonFormat1(Grenade)
 }
