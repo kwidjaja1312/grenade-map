@@ -15,8 +15,8 @@ sealed trait GameComponent {
     * @param other Other coordinate to check against self.
     */
   def isInRadius(other: Coordinate): Boolean =
-    coordinate.point.x + coordinate.radius.width > other.point.x &&
-      coordinate.point.y + coordinate.radius.width > other.point.y
+    ((coordinate.point.x + coordinate.radius.range) > (other.point.x + other.radius.range)) &&
+      (coordinate.point.y + coordinate.radius.range) > (other.point.y + other.radius.range)
 }
 
 case class Grenade(coordinate: Coordinate) extends GameComponent
