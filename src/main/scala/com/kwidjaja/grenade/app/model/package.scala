@@ -1,13 +1,18 @@
 package com.kwidjaja.grenade.app
 
-/**
-  * Common/Generic classes
-  *
-  * @author widjajk
-  * @since 3/10/19 7:10 PM
-  */
+/** Package to contains types as models */
 package object model {
 
-  case class Point(x: Int, y: Int)
-  case class Radius(width: Int)
+  /**
+    * Trait to define types of measurement in the game
+    *
+    * @author widjajk
+    * @since 3/10/19 7:10 PM
+    */
+  sealed trait MeasurementUnit
+
+  case class Point(x: Int, y: Int) extends MeasurementUnit
+  case class Radius(width: Int) extends MeasurementUnit
+
+  case class Coordinate(point: Point, radius: Radius)
 }
