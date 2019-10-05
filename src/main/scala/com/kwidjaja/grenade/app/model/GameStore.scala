@@ -1,6 +1,4 @@
-package com.kwidjaja.grenade.app.server
-
-import com.kwidjaja.grenade.app.model.{Grenade, Player}
+package com.kwidjaja.grenade.app.model
 
 /**
   * Class to store the states of the Game.

@@ -36,8 +36,8 @@ package object app {
     private def initialCoordinateOf: String => Coordinate = { component =>
       val coordinateConfig: Config = gameConfig.getObject(component).toConfig
 
-      assert(coordinateConfig.getInt("x") > 0, "X Coordinate must be positive integer")
-      assert(coordinateConfig.getInt("y") > 0, "Y Coordinate must be positive integer")
+      assert(coordinateConfig.getInt("x") >= 0, "X Coordinate must be positive integer")
+      assert(coordinateConfig.getInt("y") >= 0, "Y Coordinate must be positive integer")
 
       val point: Point = Point(coordinateConfig.getInt("x"), coordinateConfig.getInt("y"))
       val radius: Radius = Radius(coordinateConfig.getInt("radius"))

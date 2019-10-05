@@ -3,7 +3,8 @@ package com.kwidjaja.grenade.app
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
-import com.kwidjaja.grenade.app.server.{GameStore, HttpRoute}
+import com.kwidjaja.grenade.app.model.GameStore
+import com.kwidjaja.grenade.app.server.HttpRoute
 
 import scala.concurrent.ExecutionContext
 import scala.io.StdIn

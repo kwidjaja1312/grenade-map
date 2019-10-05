@@ -5,4 +5,5 @@ Sample/Demo application of using plain Scala
 * Coordinate of each Game Component will always be positive with the minimum is `X = 0; Y = 0`
 * Game's Grid Map cannot be modified once the game started
 * Game's Grid Cell started from coordinate (X = 0, Y = 0) and expanded up to the specified `Radius`
+* Grenade blast radius will be between `0 > N < 5`
 * Player will be teleported automatically by the Server after the each Grenade blasted 
