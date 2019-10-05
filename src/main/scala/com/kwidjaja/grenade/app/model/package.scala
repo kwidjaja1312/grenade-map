@@ -12,7 +12,8 @@ package object model {
   sealed trait MeasurementUnit
 
   case class Point(x: Int, y: Int) extends MeasurementUnit
-  case class Radius(range: Int) extends MeasurementUnit
 
-  case class Coordinate(point: Point, radius: Radius)
+  case class Radius(range: Int = 0) extends MeasurementUnit
+
+  case class Coordinate(point: Point, radius: Radius = Radius())
 }
