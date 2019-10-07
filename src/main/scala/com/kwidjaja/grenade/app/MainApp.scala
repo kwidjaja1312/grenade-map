@@ -32,4 +32,6 @@ object MainApp extends App {
     StdIn.readLine() // let it run until user presses return
     bindingFuture.flatMap(_.unbind()).onComplete(_ => system.terminate())
   }
+
+  initServer()
 }
