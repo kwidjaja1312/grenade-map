@@ -3,7 +3,6 @@ package com.kwidjaja.grenade.app
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
-import com.kwidjaja.grenade.app.model.GameStore
 import com.kwidjaja.grenade.app.server.HttpRoute
 
 import scala.concurrent.ExecutionContext
@@ -22,8 +21,7 @@ object MainApp extends App {
   implicit val executionContext: ExecutionContext = system.dispatcher
 
   def initServer(): Unit = {
-    val gameStore: GameStore = GameStore(AppConfig.grenade, AppConfig.player)
-    val serverRoutes: HttpRoute = HttpRoute(gameStore)
+    val serverRoutes: HttpRoute = HttpRoute()
 
     val bindingFuture = Http().bindAndHandle(serverRoutes.routes, "localhost", 8080)
     println(s"Server online at http://localhost:8080/\nPress RETURN to stop...")

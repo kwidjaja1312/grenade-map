@@ -1,6 +1,6 @@
 package com.kwidjaja.grenade.app.util
 
-import com.kwidjaja.grenade.app.model.{Grenade, GridMap, Player, Point}
+import com.kwidjaja.grenade.app.model.{Grenade, GridMap, Player, PlayerKilled, PlayerStatus, Point, UnableToSpawnPlayer}
 
 import scala.util.Random
 
@@ -31,6 +31,33 @@ object GameBoardHelper {
     * @param gridMap Instance of [[com.kwidjaja.grenade.app.model.GridMap GridMap]]
     * @param player Instance of [[com.kwidjaja.grenade.app.model.Player Player]]
     */
-  def grenadeKilledPlayer(grenades: List[Grenade], gridMap: GridMap, player: Player): Option[Grenade] =
-    grenades.filter(g => gridMap.isInRadius(g)).find(_.isInRadius(player))
+  def grenadeBlastThePlayer(
+    grenades: List[Grenade],
+    gridMap: GridMap,
+    player: Player): Either[PlayerStatus, List[Grenade]] = {
+
+    val validGrenades = grenades.filter(g => gridMap.isInRadius(g))
+    validGrenades.find(_.isInRadius(player)) match {
+      case Some(_) => Left(PlayerKilled)
+      case None => Right(validGrenades)
+    }
+  }
+
+  /**
+    * Check if the `p2` player spawned at the same location with `p1` player. Return the `p2` player
+    * if not.
+    *
+    * @param p1 First player.
+    * @param p2 Second player.
+    */
+  def playerSpawnedInTheSameCoordinate(p1: Player, p2: Player): Either[PlayerStatus, Player] =
+    if (p1.isInRadius(p2)) Left(UnableToSpawnPlayer) else Right(p2)
+
+  /**
+    * Draw the grid map to visualize the state of player and grenades.
+    *
+    * @param player Instance of [[com.kwidjaja.grenade.app.model.Player Player]]
+    * @param grenades List of [[com.kwidjaja.grenade.app.model.Grenade Grenade]]
+    */
+  def drawGridMap(player: Player, grenades: List[Grenade]): String = ???
 }
