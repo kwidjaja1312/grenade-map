@@ -17,3 +17,7 @@ case object PlayerKilled extends PlayerStatus {
 case object UnableToSpawnPlayer extends PlayerStatus {
   override val statusMsg: String = "Unable to spawn Person in that location"
 }
+
+case object PlayerNotExists extends PlayerStatus {
+  override val statusMsg: String = "Player is not initialized"
+}

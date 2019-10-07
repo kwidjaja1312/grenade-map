@@ -1,7 +1,8 @@
 package com.kwidjaja.grenade.app.util
 
-import com.kwidjaja.grenade.app.model.{Grenade, GridMap, Player, PlayerKilled, PlayerStatus, Point, UnableToSpawnPlayer}
+import com.kwidjaja.grenade.app.model._
 
+import scala.language.postfixOps
 import scala.util.Random
 
 /**
@@ -13,7 +14,8 @@ import scala.util.Random
 object GameBoardHelper {
 
   /**
-    * Generate a random coordinate's point in a given `gridMap`.
+    * Generate a random coordinate's point in a given `gridMap`. Refer to the Assumptions in the
+    * README.md.
     *
     * @param gridMap Instance of [[com.kwidjaja.grenade.app.model.GridMap GridMap]]
     */
@@ -21,7 +23,7 @@ object GameBoardHelper {
     val newX: Int = gridMap.coordinate.point.x + gridMap.coordinate.radius.range
     val newY: Int = gridMap.coordinate.point.y + gridMap.coordinate.radius.range
 
-    Point(Random.between(0, newX), Random.between(0, newY))
+    Point(Random.between(5, newX - 5), Random.between(5, newY - 5))
   }
 
   /**
@@ -56,8 +58,41 @@ object GameBoardHelper {
   /**
     * Draw the grid map to visualize the state of player and grenades.
     *
+    * @param gridMap Instance of [[com.kwidjaja.grenade.app.model.GridMap GridMap]]
     * @param player Instance of [[com.kwidjaja.grenade.app.model.Player Player]]
     * @param grenades List of [[com.kwidjaja.grenade.app.model.Grenade Grenade]]
     */
-  def drawGridMap(player: Player, grenades: List[Grenade]): String = ???
+  def drawGridMap(gridMap: GridMap, player: Player, grenades: List[Grenade]): String = {
+
+    /** Filter the cell and fill in the `X` mark on specific `GridCell` */
+    def fillInGrenades: List[GridCell] => List[GridCell] = { cells =>
+      cells map { cell =>
+        grenades.find(_.isInRadius(cell)) match {
+          case Some(_) => cell.copy(content = "X")
+          case None => cell
+        }
+      }
+    }
+
+    /** Filter the cell and fill in the `P` mark on specific `GridCell` */
+    def fillInPlayer: List[GridCell] => List[GridCell] = { filledCells =>
+      filledCells map { cell =>
+        val inTheSameCoordinatePoint: Boolean =
+          cell.coordinate.point.x == player.coordinate.point.x &&
+            cell.coordinate.point.y == player.coordinate.point.y
+
+        if (inTheSameCoordinatePoint) cell.copy(content = "P") else cell
+      }
+    }
+
+    def stringifyCells: List[GridCell] => String = _.map(_.content).mkString("|", "|", "|")
+
+    val radius: Int = gridMap.coordinate.radius.range
+    val grid: List[List[GridCell]] = List.tabulate(radius, radius)({ (x, y) =>
+      val coordinate: Coordinate = Coordinate(Point(x + 1, y + 1))
+      GridCell(coordinate)
+    })
+
+    grid map fillInGrenades map fillInPlayer map stringifyCells mkString "\n"
+  }
 }

@@ -16,18 +16,20 @@ sealed trait GameComponent {
     */
   def isInRadius(other: GameComponent): Boolean = {
     val inHorizontalRadius: Boolean =
-      ((coordinate.point.x + coordinate.radius.range) > (other.coordinate.point.x + other.coordinate.radius.range)) &&
-        ((other.coordinate.point.x + other.coordinate.radius.range) > (coordinate.point.x - coordinate.radius.range))
+      ((coordinate.point.x + coordinate.radius.range) >= (other.coordinate.point.x + other.coordinate.radius.range)) &&
+        ((other.coordinate.point.x + other.coordinate.radius.range) >= (coordinate.point.x - coordinate.radius.range))
 
     val inVerticalRadius: Boolean =
-      ((coordinate.point.y + coordinate.radius.range) > (other.coordinate.point.y + other.coordinate.radius.range)) &&
-        ((other.coordinate.point.y + other.coordinate.radius.range) > (coordinate.point.y - coordinate.radius.range))
+      ((coordinate.point.y + coordinate.radius.range) >= (other.coordinate.point.y + other.coordinate.radius.range)) &&
+        ((other.coordinate.point.y + other.coordinate.radius.range) >= (coordinate.point.y - coordinate.radius.range))
 
     inHorizontalRadius && inVerticalRadius
   }
 }
 
 case class GridMap(coordinate: Coordinate) extends GameComponent
+
+case class GridCell(coordinate: Coordinate, content: String = " ") extends GameComponent
 
 case class Grenade(coordinate: Coordinate) extends GameComponent
 

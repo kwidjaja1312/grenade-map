@@ -20,6 +20,10 @@ object MainApp extends App {
   implicit val materializer: ActorMaterializer = ActorMaterializer()
   implicit val executionContext: ExecutionContext = system.dispatcher
 
+  /**
+    * Use the command argument to specify the application role. This function will run the application
+    * by boot the HTTP Route up to serve client's requests.
+    */
   def initServer(): Unit = {
     val serverRoutes: HttpRoute = HttpRoute()
 

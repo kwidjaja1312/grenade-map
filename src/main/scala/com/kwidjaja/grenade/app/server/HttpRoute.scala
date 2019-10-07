@@ -44,6 +44,7 @@ class HttpRoute(
           case (Some(p1), None) => Right(p1)
           case (None, Some(p2)) => Right(p2)
           case (Some(p1), Some(p2)) => playerSpawnedInTheSameCoordinate(p1, p2)
+          case (None, None) => Left(PlayerNotExists)
         }
 
         // Check if any of grenades blasted the player
@@ -53,15 +54,20 @@ class HttpRoute(
         } yield (player, grenades)
 
         eitherPlayerAndGrenades match {
+          // Clear the container since the player got killed and marked as the end of the game
           case Left(pk @ PlayerKilled) =>
-            // Clear the container since the player got killed and marked as the end of the game
+            // This is dangerous in the real world since there will be concurrency process updating
+            // the list. But it should sufficient for the assignment purpose.
             playerContainer.clear()
             complete(StatusCodes.OK, pk.statusMsg)
 
-          case Left(us @ UnableToSpawnPlayer) =>
-            // Ignore the everything and respond to the Client immediately
-            complete(StatusCodes.OK, us.statusMsg)
+          // Ignore the everything and respond to the Client immediately
+          case Left(us @ UnableToSpawnPlayer) => complete(StatusCodes.OK, us.statusMsg)
 
+          // Ignore the everything and respond to the Client immediately
+          case Left(pn @ PlayerNotExists) => complete(StatusCodes.BadRequest, pn.statusMsg)
+
+          // Valid request
           case Right(playerAndGrenadeTuple) =>
             val (player, grenades): (Player, List[Grenade]) = playerAndGrenadeTuple
 
@@ -72,7 +78,7 @@ class HttpRoute(
             // Teleport the player and store it to the buffer to prepare for the next grenade
             (player.moveTo _ andThen playerContainer.prepend)(newPlayerCoordinate)
             // Draw the state of the grid with player and grenades
-            drawGridMap(player, grenades)
+            println(drawGridMap(gridMap, player, grenades) + "\n")
             complete(StatusCodes.OK)
         }
       }
