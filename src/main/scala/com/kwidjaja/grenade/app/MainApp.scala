@@ -27,7 +27,7 @@ object MainApp extends App {
   def initServer(): Unit = {
     val serverRoutes: HttpRoute = HttpRoute()
 
-    val bindingFuture = Http().bindAndHandle(serverRoutes.routes, "localhost", 8080)
+    val bindingFuture = Http().bindAndHandle(serverRoutes.routes, "0.0.0.0", 8080)
     println(s"Server online at http://localhost:8080/\nPress RETURN to stop...")
     StdIn.readLine() // let it run until user presses return
     bindingFuture.flatMap(_.unbind()).onComplete(_ => system.terminate())
